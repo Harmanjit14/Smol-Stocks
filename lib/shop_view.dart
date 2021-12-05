@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_chart/charts/line-chart.widget.dart';
 import 'package:line_chart/model/line-chart.model.dart';
+import 'package:smolstocks/profile.dart';
 
 import 'package:smolstocks/utils/color.dart';
 import 'package:smolstocks/utils/fonts.dart';
@@ -14,6 +15,11 @@ class ShopView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(() => const ProfileLauncher());
+        },
+      ),
       // backgroundColor: white,
       appBar: AppBar(
         elevation: 1,
@@ -420,9 +426,12 @@ class PerformanceShopScreen extends StatelessWidget {
                   Container(
                     width: size.width / 4,
                     padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(boxShadow: const [
-                      BoxShadow(blurRadius: 2, color: Colors.grey)
-                    ], color: lightBlue, borderRadius: BorderRadius.circular(20)),
+                    decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(blurRadius: 2, color: Colors.grey)
+                        ],
+                        color: lightBlue,
+                        borderRadius: BorderRadius.circular(20)),
                     child: BodyText(
                       data: "Amount in 2010\nRs120",
                       color: Colors.white,

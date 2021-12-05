@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smolstocks/env.dart';
 import 'package:smolstocks/login.dart';
+import 'package:smolstocks/profile.dart';
 import 'package:smolstocks/shop_view.dart';
 import 'package:smolstocks/utils/color.dart';
 
@@ -21,11 +23,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Smol Stocks',
       theme: ThemeData(
           primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
       home: const Launcher(),
+      // home: ProfileLauncher(),
     );
   }
 }
@@ -55,7 +58,7 @@ class _LauncherState extends State<Launcher> {
           debugPrint(snapshot.error.toString());
           return const Scaffold(
             body: Center(
-              child: Text("Error"),
+              child: Text("Error environment variables not found"),
             ),
           );
         }
