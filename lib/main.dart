@@ -1,87 +1,106 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:smolstocks/env.dart';
+import 'package:smolstocks/login.dart';
 import 'package:smolstocks/shop_view.dart';
+import 'package:smolstocks/utils/color.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Smol Stocks',
       theme: ThemeData(
           primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: const ShopView(),
+      home: const Launcher(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class Launcher extends StatefulWidget {
+  const Launcher({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _LauncherState createState() => _LauncherState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _LauncherState extends State<Launcher> {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: apiKey,
+          appId: appId,
+          messagingSenderId: messageId,
+          projectId: projectId));
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          debugPrint(snapshot.error.toString());
+          return const Scaffold(
+            body: Center(
+              child: Text("Error"),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          );
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const AuthListener();
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(
+              color: blue,
             ),
-            MyBox(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
-class MyBox extends StatelessWidget {
-  const MyBox({Key? key}) : super(key: key);
+class AuthListener extends StatefulWidget {
+  const AuthListener({Key? key}) : super(key: key);
 
   @override
+  _AuthListenerState createState() => _AuthListenerState();
+}
+
+class _AuthListenerState extends State<AuthListener> {
+  @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.1,
-      width: 500,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(blurRadius: 4)]),
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.isAnonymous) {
+            return const LoginScreen();
+          } else {
+            return const ShopView();
+          }
+        } else {
+          return const LoginScreen();
+        }
+      },
     );
   }
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "920918428075",
+    "project_id": "smolstocks",
+    "storage_bucket": "smolstocks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920918428075:android:67188faa0e2200b4d2eaee",
+        "android_client_info": {
+          "package_name": "com.example.smolstocks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920918428075-7vaqsf7c127d4ngs73m6dk48v6inrtt5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr1ikV7RGmKrJrGZTI7YpQq2t5KznJhYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920918428075-7vaqsf7c127d4ngs73m6dk48v6inrtt5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
